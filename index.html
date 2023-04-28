@@ -1,0 +1,2720 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>NORTHCOTT - STAGE 2</title>
+    <link rel="icon" href="img/icon.png">
+<style>
+html {
+height:100%}
+
+* {
+box-sizing:border-box}
+
+:root {
+--contrast:#3B4761;
+--t:.5s;
+--rhs:304px}
+
+body {
+margin:0;
+height:100%;
+font-family: 'Helvetica', sans-serif;
+overflow:hidden;
+color:#000}
+
+a {
+cursor:pointer}
+
+h1,h2,h3,h4 {
+margin:1rem 0}
+
+h1 {
+margin:0;
+font-size:2rem}
+
+h2 {
+margin:0;
+font-size:18px}
+
+h3 {
+margin:0;
+font-size:14px;
+font-weight:600}
+
+#info_main {
+font-size:12px}
+
+#info_main circle {
+fill:#fff;
+stroke:#000;
+stroke-width:1px;
+cursor:pointer}
+
+#info_main text {
+text-anchor:middle;
+font-weight:bold;
+user-select:none;
+cursor:pointer}
+
+.info {
+display:inline-block;
+vertical-align:middle;
+font-size:11px;
+width:15px;
+height:15px;
+text-align:center;
+border-radius:50%;
+border:1px solid #000;
+transform:translate(2px, -1px);
+user-select:none}
+
+h1 .info {
+height:20px;
+width:20px;
+line-height:18px}
+
+main {
+display:block;
+height:100%;
+width:calc(100% - var(--rhs));
+transition:width var(--t)}
+
+svg {
+width:100%;
+height:100%;
+overflow:visible}
+
+#title {
+font-size:2rem;
+text-anchor:middle;
+font-weight:bold}
+
+#inner,
+#outer {
+fill:none;
+stroke:#000;
+stroke-width:1px;
+stroke-dasharray:2px 4px;
+transition:radius var(--t)}
+
+text {
+-webkit-user-select:none;
+user-select:none}
+
+textPath {
+text-anchor:middle;
+font-weight:600;
+fill:#666}
+
+#circles_wrapper circle {
+cursor:grab}
+
+#circles_wrapper circle.is_dragging,
+#circles_wrapper circle:focus {
+cursor:grabbing}
+
+circle.support_worker {
+fill:transparent;
+stroke:#666;
+stroke-width:1.5px}
+
+circle[data-activity="Disruptions"] {
+fill:transparent;
+stroke:#ff9ea1;
+stroke-width:1.5px;
+cursor:default!important}
+
+#labels_wrapper  {
+user-select:none;
+pointer-events:none}
+
+#labels_wrapper text.disruptions {
+fill:#ff575C}
+
+#labels_wrapper text {
+font-weight:600;
+line-height:1;
+transition:fill .75s}
+
+#labels_wrapper text.support_worker,
+#labels_wrapper text.support_worker tspan {
+fill:#666}
+
+#labels_wrapper tspan {
+text-anchor:middle}
+
+#labels_wrapper circle {
+fill:none;
+opacity:0;
+transition:opacity var(--t)}
+
+#labels_wrapper path {
+fill:#000;
+opacity:0;
+transition:opacity var(--t)}
+
+circle.lock {
+stroke:#000;
+stroke-width:1.5px;
+cursor:default!important}
+
+#labels_wrapper .lighten text,
+#labels_wrapper .lighten path {
+fill:#fff}
+
+#labels_wrapper g.lock circle {
+opacity:1;
+stroke:#8B8B8B;
+stroke-width:1.5px;
+stroke-dasharray:1.5px 1.5px}
+
+#labels_wrapper g.lock path {
+opacity:1}
+
+/* HIGH CONTRAST */
+
+.contrast textPath, 
+.contrast #labels_wrapper text.support_worker,
+.contrast #labels_wrapper text.support_worker tspan,
+.contrast #labels_wrapper text.disruptions {
+fill:var(--contrast)}
+
+.contrast circle.support_worker,
+.contrast circle[data-activity="Disruptions"] {
+stroke:var(--contrast)}
+
+/* SIZE */
+
+#size {
+position:fixed;
+left:1rem;
+bottom:1rem;
+font-size:11px;
+line-height:1}
+
+#size.over {
+color:red}
+
+#download {
+width:8px;
+height:10px;
+vertical-align:middle;
+display:inline-block;
+background:url(img/file.svg) no-repeat 50%/contain;
+transform:translate(-1px,-1px);
+cursor:pointer}
+
+aside {
+position:fixed;
+display:flex;
+flex-direction:column;
+justify-content:space-between;
+padding:2rem 0 2rem 2rem;
+top:0;
+right:0;
+bottom:0;
+width:var(--rhs);
+background:#fff;
+box-shadow:-5px 0px 5px 5px rgba(0,0,0,0.05);
+overflow:auto;
+transition:transform var(--t)}
+
+/* TOGGLE */
+
+#toggle {
+position:fixed;
+top:2rem;
+right:var(--rhs);
+background:#fff url(img/sliders.svg) no-repeat 50%/17px;
+box-shadow:-5px 0px 5px 0 rgba(0,0,0,0.05);
+width:30px;
+height:40px;
+text-align:center;
+line-height:2rem;
+border-radius:5px 0 0 5px;
+transition:transform var(--t); 
+transform:translate(0,-10px);
+cursor:pointer}
+
+.is_fullscreen #toggle,
+.is_fullscreen aside {
+/* right:calc(var(--rhs) * -1); */
+transform:translateX(var(--rhs))}
+
+.is_fullscreen #toggle {
+box-shadow:-5px 0px 5px 5px rgba(0,0,0,0.05)}
+
+.is_fullscreen aside {
+box-shadow:none}
+
+.is_fullscreen main {
+width:100%}
+
+aside .set,
+#key {
+max-width:240px}
+
+#priorities {
+margin-bottom:2rem}
+
+#priorities h2  {
+margin-bottom:1rem}
+
+#priorities .wrapper  {
+position:relative}
+
+/* #priorities .wrapper:after  {
+content:'';
+position:absolute;
+left:50%;
+top:100%;
+border-left:1px solid #000;
+height:6px;
+transform:translate(0,0);
+opacity:.25} */
+
+.set > div {
+margin-bottom:2rem}
+
+input[type="range"] {
+display:block;
+width:100%;
+margin:5px 0 0 0;
+font-size:10px;
+line-height:1;
+cursor:grab}
+
+select {
+display:block;
+width:100%;
+font-weight:bold;
+border:1px solid #ccc;
+height:34px;
+border-radius:17px;
+padding:0 20px 0 10px;
+font-size:14px}
+
+.bar {
+display:flex;
+position:relative;
+margin:1rem 0 2rem}
+
+.contrast .bar {
+opacity:0}
+
+.bar > div {
+width:calc(100%/5);
+height:14px}
+
+.bar:before,
+.bar:after {
+content:'low';
+top:calc(100% + 5px);
+left:0;
+position:absolute;
+font-size:11px;
+color:#999}
+
+.bar:after {
+content:'high';
+left:auto;
+right:0}
+
+.labels div {
+font-size:10px;
+color:#999;
+position:relative;
+padding:0 0 1rem 0}
+
+.labels span {
+display:inline-block;
+width:18px;
+height:18px;
+border-radius:50%;
+background:#999}
+
+.labels span.support_workers {
+background:#fff;
+border:1px solid #999}
+
+.activities div {
+padding-left:24px}
+
+.activities span {
+position:absolute;
+top:-2px;
+left:0}
+
+.time span {
+position:relative;
+margin:0 12px}
+
+.time .less {
+width:7px;
+height:7px}
+
+.time span:after {
+content:'less';
+position:absolute;
+top:100%;
+left:50%;
+transform:translate(-50%, 2px)}
+
+.time .more:after {
+content:'more'}
+
+#key {
+margin:0}
+
+#overlay,
+#info {
+display:none;
+position:absolute;
+background:#fff;
+padding:15px;
+font-size:12px;
+border-radius:5px;
+width:240px;
+box-shadow:0 0 2px 2px rgba(0,0,0,.1);
+transform:translate(0, -5px) translate(-50%, -100%);
+/* transition:opacity var(--t) */
+}
+
+#overlay.alt {
+transform:translate(0, 10px) translate(-50%, 0)}
+
+#overlay h3 {
+text-align:center;
+margin:0;
+padding:0 20px}
+
+#overlay.locked h3:before {
+content:'';
+display:inline-block;
+width:7px;
+height:9px;
+vertical-align:middle;
+background:url(img/locked_sm.svg) no-repeat 50% 50%/contain;
+transform:translate(-4px,-2px);
+opacity:1}
+
+#overlay h3 + h5 {
+text-align:center;
+margin:0 0 1rem;
+font-weight:normal;
+color:#999}
+
+#overlay .stats {
+margin:1rem 0 0}
+
+#overlay .stats > div {
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin:5px 0}
+
+#overlay h4 {
+width:75px;
+text-transform:capitalize;
+font-size:11px;
+margin:0;
+font-weight:normal}
+
+#overlay h4 span {
+font-weight:normal}
+
+#overlay .line {
+width:135px}
+
+#overlay .line input {
+margin:0}  
+
+#overlay .line input.disabled {
+opacity:.5}  
+
+/* #overlay .dot {
+position:absolute;
+background:#000;
+height:100%} */
+
+#overlay .notes {
+font-size:11px;
+color:#999;
+margin:1rem 0 0}
+
+#overlay .btns {
+font-size:11px;
+margin:1rem 0 0 0;
+text-align:right}
+
+#overlay button {
+font-size:10px;
+line-height:1;
+padding:5px;
+background:#fff;
+border-radius:5px;
+border:1px solid #000;
+color:#000;
+cursor:pointer;
+transition:var(--t)}
+
+#overlay button:not([disabled]):hover {
+background:#000;
+color:#fff}
+
+#overlay button[disabled] {
+cursor:default;
+opacity:.25}
+
+#info {
+width:420px;
+padding:20px 35px 15px 25px;
+transform:translate(-50%, -50%);
+font-size:14px}
+
+#info h3 {
+font-size:14px}
+
+#info.open {
+display:block;
+left:calc((100% - var(--rhs))/2);
+top:50%}
+
+.close {
+position:absolute;
+top:10px;
+right:15px;
+font-size:20px;
+cursor:pointer}
+
+.close:before {
+content:"×";
+opacity:.25}
+
+/* */
+@media (pointer:fine){
+
+    #circles_wrapper circle:not([data-activity="Disruptions"]):hover {
+    opacity:.75;
+    transition:opacity var(--t), stroke var(--t)}
+
+}
+</style>
+</head>
+<body>
+
+<main>
+ 
+    <svg>
+
+        <svg x="50%" y="54">
+            <text id="title" x="0" y="0">STAGE 2</text>
+            <g id="info_main" data-section="main" transform="translate(85, -10)"> 
+                <circle cx="0" cy="0" r="10" />
+                <text x="0" y="4">?</text>
+            </g>
+        </svg>
+
+        <!-- vector-effect="non-scaling-stroke" -->
+
+        <svg x="50%" y="52%">
+            
+            <defs>
+                <path id="text_inner" d="" />
+                <path id="text_outer" d="" />
+            </defs>
+
+            <g id="scale_wrapper">
+
+                <circle id="inner" cx="0" cy="0" r="0" />
+                <!-- <circle id="outer" cx="0" cy="0" r="0" /> -->
+                <!-- extra space/linebreak needed for FF -->
+                <text>  
+                    <textPath xlink:href="#text_inner" startOffset="25%"> 
+                        Things that happen
+                    </textPath> 
+                </text>
+                <text> 
+                    <textPath xlink:href="#text_outer" startOffset="25%">
+                        Things that don’t happen
+                </textPath>  
+                </text>
+
+                <g id="circles_wrapper"></g>
+                <g id="labels_wrapper"></g>
+
+            </g>
+            
+        </svg>
+
+    </svg>
+    
+    <div id="size"><a id="download"></a> | <span></span></div>
+
+</main>
+
+
+<aside>
+
+    <div id="sliders">
+
+        <div class="set" id="priorities">
+
+            <h2>What’s prioritised? <a data-section="priorities" class="info">?</a></h2>
+
+            <div>
+                <h3>Reducing risk</h3>
+                <div class="wrapper"><input data-metric="risk" type="range" value="0" min="-4" max="4" step=".25" /></div>
+            </div>
+            
+            <div>
+                <h3>Reducing cost</h3>
+                <div class="wrapper"><input data-metric="cost" type="range" value="0" min="-4" max="4" step=".25" /></div>
+            </div>
+
+            <div>
+                <h3>Reducing complexity</h3>
+                <div class="wrapper"><input data-metric="complexity" type="range" value="0" min="-4" max="4" step=".25" /></div>
+            </div>
+
+            <div>
+                <h3>Doing things that Steve enjoys</h3>
+                <div class="wrapper"><input data-metric="enjoyment" type="range" value="0" min="-4" max="4" step=".25" /></div>
+            </div>
+
+            <div>
+                <h3>Being aware of what Steve enjoys</h3>
+                <div class="wrapper"><input data-metric="awareness" type="range" value="0" min="-4" max="4" step=".25" /></div>
+            </div>
+
+        </div>
+
+        <div class="set" id="support">
+
+            <h2>How much support? <a data-section="support" class="info">?</a></h2>
+
+            <div>
+                <div class="wrapper"><input data-metric="support" type="range" min="0" max="4" step=".025" value="1"  /></div>
+            </div>
+
+        </div>
+
+        <div class="set" id="disruptions">
+
+            <h2>How many disruptions? <a data-section="disruptions" class="info">?</a></h2>
+
+            <div>
+                <div class="wrapper"><input data-metric="disruptions" type="range" min="0" max="4" step=".025" value="1" /></div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div id="key">
+
+        <select>
+            <option value="risk">Risk</option>
+            <option value="cost">Cost</option>
+            <option value="complexity">Complexity</option>
+            <option value="enjoyment" selected="selected">Steve’s enjoyment</option>
+            <option value="awareness">Awarness of Steve’s enjoyment</option>
+            <option value="support">Support</option>
+            <option value="contrast">High contrast</option>
+        </select>
+
+        <div class="bar">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+
+        <div class="labels activities">
+            <div><span class=""></span> Activities Steve does (perhaps with support)</div>
+            <div><span class="support_workers"></span> Activities that support workers do for Steve</div>
+        </div>
+
+        <div class="labels time">
+            <div>Time spent on an activity: <span class="less"></span> <span class="more"></span></div>
+        </div>
+
+    </div>
+
+</aside>
+
+<div id="toggle"></div>
+
+<div id="overlay"></div>
+
+<div id="info">
+    <a class="close"></a>
+    <div id="info_text"></div>
+</div>
+
+<script src="d3.v7.min.js"></script>
+<script>
+
+'use strict'  
+
+/*
+[]
+"
+{} 
+    '
+*/ 
+
+// DATA ////////////////////////////////////////
+
+/*
+
+- OPTION TO SET TOTAL SUPPORT HRS? (USE WHICHEVER IS LARGER)
+- RESET
+- DIFF APPROACHES TO SLIDERS, STEPS ETC. ARTCULATE!!!
+
+*/
+
+
+let _DATA = [
+
+    // KEEP DISRUPTION FIRST?
+    {
+        activity: 'Disruptions',
+        size: 15,
+        inner: true,
+        disruptions: true
+    }, 
+    
+    // INNER WORKER
+    {
+        activity: 'Making Meals',
+        size: 30,
+        risk: 0,
+        cost: 1,
+        complexity: 0,
+        enjoyment: 0,
+        awareness: 0,
+        support: 0,
+        inner: true,
+        support_worker: true
+    },{
+        activity: 'Making beverages',
+        size: 7.5,
+        risk: 0,
+        cost: 1,
+        complexity: 0,
+        enjoyment: 0,
+        awareness: 0,
+        support: 0,
+        inner: true,
+        support_worker: true
+    },{
+        activity: 'Laundry',
+        size: 7.5,
+        risk: 0,
+        cost: 1,
+        complexity: 0,
+        enjoyment: 0,
+        awareness: 0,
+        support: 0,
+        inner: true,
+        support_worker: true
+    },{
+        activity: 'Cleaning home',
+        size: 90,
+        risk: 0,
+        cost: 1,
+        complexity: 0,
+        enjoyment: 0,
+        awareness: 0,
+        support: 0,
+        inner: true,
+        support_worker: true
+    },
+
+    // {
+    //     activity: 'Travel to/from Lifeskills/Day Programs ',
+    //     size: 6,
+    //     risk: 0,
+    //     cost: 1,
+    //     complexity: 0,
+    //     enjoyment: 0,
+    //     awareness: 0,
+    //     support: 0,
+    //     inner: true,
+    //     support_worker: true,
+    //     notes: 'travel in the van with one of my co-residents each day I attend Lifeskills'
+    // },     
+ 
+    // INNER Steve
+    {
+        activity: 'Showering',
+        size: 15, 
+        cost: 0,
+        risk: 3, 
+        complexity: 1,
+        support: 2,
+        enjoyment: 2,
+        awareness: 3, 
+        inner: true,
+        keep: true,
+        notes: false
+    },{
+        activity: 'Oral Hygiene',
+        size: 5, 
+        cost: 0,
+        risk: 1, 
+        complexity: 1,
+        support: 1,
+        enjoyment: 3,
+        awareness: 4, 
+        inner: true,
+        keep: true,
+        notes: false
+    },{
+        activity: 'Toilet & continence support',
+        size: 10, 
+        cost: 4,
+        risk: 1, 
+        complexity: 1,
+        support: 4,
+        enjoyment: 1,
+        awareness: 5, 
+        inner: true,
+        keep: true,
+        notes: '2 to 1 ratio for continence support'
+    },{
+        activity: 'Dressing',
+        size: 10, 
+        cost: 4,
+        risk: 1, 
+        complexity: 1,
+        support: 3,
+        enjoyment: 2,
+        awareness: 4, 
+        inner: true,
+        keep: true 
+    },{
+        activity: 'Shoes/Socks',
+        size: 5, 
+        cost: 4,
+        risk: 1, 
+        complexity: 1,
+        support: 3,
+        enjoyment: 2,
+        awareness: 4, 
+        inner: true,
+        keep: true 
+    },{ 
+        activity: 'Eating Meals',
+        size: 15, 
+        cost: 0,
+        risk: 3, 
+        complexity: 1,
+        support: 2,
+        enjoyment: 4,
+        awareness: 4, 
+        inner: true,
+        keep: true 
+    },{
+        activity: 'Drinking beverages',
+        size: 7.5, 
+        cost: 0,
+        risk: 1, 
+        complexity: 1,
+        support: 1,
+        enjoyment: 4,
+        awareness: 4, 
+        inner: true,
+        keep: true 
+    },{
+        activity: 'Cleaning room',
+        size: 5, 
+        cost: 4,
+        risk: 1, 
+        complexity: 1,
+        support: 4,
+        enjoyment: 1,
+        awareness: 5, 
+        inner: true, 
+        notes: ''
+    },{
+        activity: 'Life Skills/Day Programs',
+        size: 78, /**/
+        cost: 0,
+        risk: 2, 
+        complexity: 1,
+        support: 0,
+        enjoyment: 3,
+        awareness: 3, 
+        inner: true, 
+        keep: true, 
+        notes: 'includes travel (6hrs)'
+    },{
+        activity: 'Bowlo visit (day)',
+        size: 16, 
+        cost: 4,
+        risk: 3, 
+        complexity: 3,
+        support: 4,
+        enjoyment: 4,
+        awareness: 5, 
+        inner: true
+    },{
+        activity: 'Coffee at cafe',
+        size: 6, 
+        cost: 4,
+        risk: 3, 
+        complexity: 3,
+        support: 4,
+        enjoyment: 4,
+        awareness: 5, 
+        inner: true,
+        notes: 'inlcudes walking to and from the cafe'
+    },{
+        activity: 'Occupational Therapy',
+        size: 1.5	, 
+        cost: 4,
+        risk: 2, 
+        complexity: 2,
+        support: 4,
+        enjoyment: 2,
+        awareness: 4, 
+        inner: true,
+        notes: 'inlcudes walking to and from the cafe'
+    },{
+        activity: 'Speech Pathology',
+        size: 1.5	, 
+        cost: 4,
+        risk: 2, 
+        complexity: 2,
+        support: 4,
+        enjoyment: 2,
+        awareness: 4, 
+        inner: true,
+        notes: ''
+    },{
+        activity: 'Positive Behaviour Support',
+        size: 1.5	, 
+        cost: 4,
+        risk: 2, 
+        complexity: 2,
+        support: 4,
+        enjoyment: 2,
+        awareness: 4, 
+        inner: true,
+        notes: ''
+    },{
+        activity: 'Seeing the doctor',
+        size: 0.5	, 
+        cost: 4,
+        risk: 4, 
+        complexity: 4,
+        support: 4,
+        enjoyment: 2,
+        awareness: 4, 
+        inner: true,
+        notes: ''
+    },{
+        activity: 'Physiotherapist',
+        size: 1.5 , 
+        cost: 4,
+        risk: 2, 
+        complexity: 2,
+        support: 4,
+        enjoyment: 2,
+        awareness: 4, 
+        inner: true,
+        notes: ''
+    },{
+        activity: 'Watching rugby league (TV)',
+        size: 16, 
+        cost: 0,
+        risk: 1, 
+        complexity: 1,
+        support: 1,
+        enjoyment: 4,
+        awareness: 4, 
+        inner: true,
+        notes: ''
+    },{
+        activity: 'Watching rugby league (live)',
+        size: 6, 
+        cost: 4,
+        risk: 4, 
+        complexity: 4,
+        support: 4,
+        enjoyment: 4,
+        awareness: 5, 
+        inner: true,
+        notes: '2 to 1 ratio when in the community of an evening'
+    },{
+        activity: 'Experiences distress - sunset',
+        size: 15, 
+        cost: 4,
+        risk: 4, 
+        complexity: 1,
+        support: 4,
+        enjoyment: 1,
+        awareness: 3, 
+        inner: true,
+        notes: 'staff know he gets upset daily, but not all staff can attribute the distress to sunset time period'
+    },{
+        activity: 'Resting',
+        size: 30, 
+        cost: 0,
+        risk: 1, 
+        complexity: 1,
+        support: 1,
+        enjoyment: 1,
+        awareness: 1, 
+        inner: true,
+        notes: ''
+    },{
+        activity: 'Collecting footy cards',
+        size: 2.5	, 
+        cost: 4,
+        risk: 1, 
+        complexity: 1,
+        support: 2,
+        enjoyment: 4,
+        awareness: 5, 
+        inner: true,
+        notes: 'want staff to be more involved in supporting his collection'
+    },{ 
+        activity: 'listening to the radio',
+        size: 15, 
+        cost: 4,
+        risk: 1, 
+        complexity: 1,
+        support: 1,
+        enjoyment: 3,
+        awareness: 1, 
+        inner: true,
+        notes: 'Steve loves to relax while he listens to the radio'
+    },{
+        activity: 'Sleep',
+        size: 200, 
+        cost: 1,
+        risk: 2, 
+        complexity: 1,
+        support: 3,
+        enjoyment: 3,
+        awareness: 3, 
+        inner: true,
+        notes: 'frequent waker - active overnights required'
+    },
+
+ 
+    // OUTER WORKER
+ 
+
+    // OUTER Steve
+    {
+        activity: 'Going to bowlo (night)',
+        size: 8, 
+        cost: 4,
+        risk: 4, 
+        complexity: 4,
+        support: 4,
+        enjoyment: 4,
+        awareness: 2, 
+        inner: false
+    },{
+        activity: 'Going to the library',
+        size: 8, 
+        cost: 1,
+        risk: 2, 
+        complexity: 2,
+        support: 2,
+        enjoyment: 2,
+        awareness: 4, 
+        inner: false
+    },{
+        activity: 'Gardening',
+        size: 12, 
+        cost: 1,
+        risk: 1, 
+        complexity: 1,
+        support: 1,
+        enjoyment: 3,
+        awareness: 3, 
+        inner: false
+    },{
+        activity: 'Karaoke',
+        size: 5, 
+        cost: 1,
+        risk: 1, 
+        complexity: 1,
+        support: 1,
+        enjoyment: 0,
+        awareness: 1, 
+        inner: false
+    },{
+        activity: 'Going to the pool',
+        size: 5, 
+        cost: 2,
+        risk: 4, 
+        complexity: 4,
+        support: 4,
+        enjoyment: 4,
+        awareness: 3, 
+        inner: false
+    },{
+        activity: 'Going to the movies',
+        size: 6, 
+        cost: 2,
+        risk: 2, 
+        complexity: 2,
+        support: 2,
+        enjoyment: 4,
+        awareness: 2, 
+        inner: false
+    },{
+        activity: 'Board Games',
+        size: 8, 
+        cost: 1,
+        risk: 1, 
+        complexity: 1,
+        support: 1,
+        enjoyment: 3,
+        awareness: 3, 
+        inner: false
+    },{
+        activity: 'Ferry Rides',
+        size: 4, 
+        cost: 3,
+        risk: 3, 
+        complexity: 3,
+        support: 3,
+        enjoyment: 1,
+        awareness: 1, 
+        inner: false
+    },{
+        activity: 'Going to the beach',
+        size: 9, 
+        cost: 3,
+        risk: 4, 
+        complexity: 4,
+        support: 4,
+        enjoyment: 3,
+        awareness: 4, 
+        inner: false
+    }
+],
+info_data = {
+
+        main : '<h3>Who is Steve?</h3><p>Steve* is a 67 man who lives in Supported Independent Living in Western Sydney.</p><h3>What is Supported Independent Living?</h3><p>[Some text about SIL, e.g.: Supported Independent living (or SIL) is provided to Australians with a disability who need a significant amount of help in their daily lives. Support is provided throughout the day, seven days a week. This includes help or supervision with daily tasks, like getting ready in the morning or cooking meals. People who live in SIL share a home with other NDIS participants. SIL is funded through the NDIS.]</p><h3>What are the challenges?</h3><p>[challenges here]</p>',
+
+        priorities : '<h3>Risk</h3><p>Risk as it applies to the safety and well being of a customer.</p><h3>Cost</h3><p>Cost is the cost per hour of frontline staff supporting the individual to perform the activity.</p><h3>Complexity</h3><p>Complexity as it correlates to the administrative or logistical effort required by the "team" in order to support the customer to complete the task/activity.</p>',
+
+        support : '<h3>Support</h3><p>Support as it refers to the amount or degree of support the customer requires from their "team" in order to complete the task/activity</p>',
+
+        disruptions : '<h3>Disruptions</h3><p>Unexpected disruptions occur in any house, and SIL homes are no different. When these unexpected disruptions happen, support workers are required to deal with them, which means they aren’t able to provide the support to Steve that they otherwise would. Disruptions can cause a ripple effect through the day or even through the week, as support workers try to balance the complex effects that these disruptions have.</p>',
+
+    }
+
+
+// SETUP ////////////////////////////////////////
+
+let $window = d3.select('window'),
+    $body = d3.select('body'),
+
+    //
+    $scale_wrapper = d3.select('#scale_wrapper'),
+    $circles_wrapper = d3.select('#circles_wrapper'),
+    $labels_wrapper = d3.select('#labels_wrapper'),
+
+    $size = d3.select('#size span'),
+
+    // RHS
+    $priorities = d3.selectAll('#priorities input[type="range"]'),
+    $bar = d3.select('.bar'),
+    $select = d3.select('select'),
+
+    $inner = d3.select('#inner'),
+    // $outer = d3.select('#outer'),
+
+    $text_inner = d3.select('#text_inner'),
+    $text_outer = d3.select('#text_outer'),
+    $support_slider = d3.select('[data-metric="support"]'),
+    $disruptions_slider = d3.select('[data-metric="disruptions"]'),
+
+    // OVERLAY
+    $overlay = d3.select('#overlay'),
+    $info = d3.select('#info'),
+    $info_text = d3.select('#info_text'),
+    $info_close = $info.selectAll('.close'),
+
+    centre_x = 0,
+    centre_y = 0,
+
+    INNER_initial = 0, // INITAL
+    INNER_current = 0, // TRACKS CHANGE
+    
+    INNER_initial_r,
+    INNER_current_r,
+
+    dragging = false,
+    _activities = [],
+
+    DISRUPTIONS_DATA = {},
+    PRIORITES = {
+        'risk': 0,
+        'cost': 0,
+        'complexity': 0,
+        'enjoyment': 0,
+        'awareness': 0
+    },
+
+    PALETTES = {
+        risk: ['#faf8cf', '#f4be93', '#f0846a', '#d35357', '#562b7c'],
+        cost: ['#e8cee4', '#e39ec6', '#a3729e', '#66617b', '#1c4a48'],
+        complexity: ['#a5d3db', '#6ab9a1', '#438da6', '#535294', '#49134b'],
+        enjoyment: ['#fbf8ce', '#c8e3b4', '#4eb6c4', '#3c7fb9', '#283a90' ],
+        awareness: ['#e8cee4', '#a3a6d3', '#6b94cd', '#28666c', '#1b4621'],
+        support: ['#e3edf8', '#ced2eb', '#ac6aac', '#ac2f70', '#811517'],
+        contrast: ['#3B4761', '#fff']
+    },
+
+    // USE TO SET DROPDOWN
+    current_metric = 'enjoyment',
+
+    screen_w = Math.min(window.screen.width, window.innerWidth),
+    screen_h = Math.min(window.screen.height, window.innerHeight),
+    min_axis = Math.min(screen_w, screen_h),
+    is_smaller = (min_axis < 600)? 1:0, 
+
+    // DEFAULTS
+
+    base_scale = 1,
+    // INNER_buffer = 1, 
+    INNER_scale = 1,
+
+    overlay_timer,
+    timer;
+
+// SMALL SCREENS HIDE MENU BY DEAFULT
+if (screen_w < 960){
+    $body.classed('is_fullscreen', true);
+}
+
+// MAKE BETTER! SCALE RELATIVE TO SCREEN SIZE
+// if (screen_w < 600){
+//     $scale_wrapper.attr('transform','scale(.5)')
+// }
+
+// HIDE OVERLAY
+ $body
+    .on('click',function(){
+     hideOverlay();    
+});
+
+window.addEventListener('resize',hideOverlay);
+
+d3
+    .select('#download')
+    .on('click', function(){
+
+        let $a = document.createElement('a'),
+            txt = ``,
+            opts = [
+                'Activity',
+                'Size (hrs)',
+                'Locked (Y/N)',
+                'Risk (0-5)',
+                'Cost (0-5)',
+                'Complexity (0-5)',
+                'Enjoyment (0-5)',
+                'Awareness (0-5)',
+                'Support (0-5)',
+                'Currently Happens (Y/N)',
+                'Support Worker Task (Y/N)',
+                'Notes'
+            ],
+            opts_actual = [
+                'activity',
+                'size',
+                'lock',
+                'risk',
+                'cost',
+                'complexity',
+                'enjoyment',
+                'awareness',
+                'support',
+                'inner',
+                'support_worker',
+                'notes'
+            ],    
+            blob,
+            data_url
+
+        // FIRST ROW 
+        txt += opts.join(',')+'\n';
+
+        _activities
+            .forEach(function(row,i){
+
+                let _tmp = [];
+                //KEEP ORDER
+                opts_actual
+                    .forEach(function(a,i){
+
+                        let v = row[a];
+
+                        if (v===true){v='Y'}
+                        else if (v===false){v='N'}
+                        else if (a=='notes' && v!= null){
+                           v = `"${v}"`;
+                        } 
+
+                        _tmp.push(v)   
+                });
+
+                 txt += _tmp.join(',')+'\n';
+        })
+
+        blob = new Blob([txt],{'type':'text/csv'});
+        data_url = window.URL.createObjectURL(blob);
+        $a.download = 'current_settings.csv';
+        $a.href = data_url;
+        $a.click()
+        $a.remove()
+        window.URL.revokeObjectURL(data_url);
+
+})
+
+////////////////////////////////////////
+function getRadiusFromArea(size){
+    return Math.sqrt((size * base_scale)/Math.PI);
+}
+
+////////////////////////////////////////
+function setDistruptionCircle(){
+
+    let radius = DISRUPTIONS_DATA['radius'],
+        write_text = (radius > 34)? true : false;
+  
+    if (DISRUPTIONS_DATA['radius'] >= INNER_current_r-1){
+        // DISRUPTIONS_DATA['radius'] = INNER_current_r;
+        DISRUPTIONS_DATA['fx'] = 0; 
+        DISRUPTIONS_DATA['fy'] = 0;
+    }
+
+    else {
+        // DISRUPTIONS_DATA['radius'] = NEED TO RESET IF CLAMPED BY SUPPORT!!!!
+        DISRUPTIONS_DATA['fx'] = null; 
+        DISRUPTIONS_DATA['fy'] = null;     
+    }
+
+    // HIDE DISTUPTIONS ON ZERO
+    $disruptions_text
+        .attr('opacity',(radius < 5) ? 0:1)
+        .select('tspan')
+        .attr('dy', 4)
+        .html(function(){
+
+            if (write_text){
+                return 'Disruptions'
+            }
+            else {
+                 return '!'  
+            }
+
+        })
+
+}
+
+////////////////////////////////////////
+function setCircleColours(){
+
+    let this_palette = PALETTES[current_metric];
+
+    $circles
+        .transition()
+        .duration(750)
+        .attr('fill',function(d, i){
+
+            if (!d['support_worker'] || !d['disruptions']){
+
+                let index = d[current_metric],
+                    lock = d['lock'];
+
+                if (current_metric == 'contrast'){
+                    index = 0
+                }
+
+                
+
+                // UPDATE TEXT COLOUR ON DARK ONES!
+                $labels
+                    .filter(function(d1, i1){
+                        return i == i1;
+                    })
+                    .classed('lighten', function(){
+
+                        let is_light = false;
+
+                        if ( (index >= 3 || current_metric == 'contrast')){
+                            is_light = true;
+                        }
+
+                        return is_light
+                    })
+
+                return this_palette[index];
+
+            }
+    })
+
+}    
+
+////////////////////////////////////////
+function getActivityValues(d){
+
+    let str = ``,
+        values = ['risk', 'cost', 'complexity', 'enjoyment', 'awareness'],
+        btn_attr = (d['is_different'])? '' : 'disabled'
+
+    str += `<div class="close"></div><h3>${d['activity']}</h3><h5>${d['size'].toFixed(1)*1}hrs</h5><div class="stats">`
+
+    for (let i=0; i<values.length; i++){
+
+        let value = values[i],
+            n = d[value]*1,
+            pos = Math.round(n/5 * 100),
+            disable = (d['support_worker'] && (value == 'enjoyment' || value == 'awareness'))? true:false
+
+        str += `<div>
+        <h4>${value}</h4>
+        <div class="line">
+            <input data-metric="${value}" type="range" value="${n}" min="0" max="4" step="1" ${(disable)? "disabled":""} class=${(disable)? "disabled":""}></div>
+        </div>`
+
+    }
+
+    str += `</div>`;
+
+    if (d['notes']){
+        str += `<p class="notes">${d['notes']}</p>`
+    }
+
+    str += `<p class="btns">
+        <button class="reset" ${btn_attr}>RESET</button>
+        </p>`
+
+    return str;
+
+}
+
+////////////////////////////////////////////////////
+function getAmountUsed(){
+
+    let INNER_used = 0,
+        n
+
+    _activities
+        .forEach(function(a,i){
+ 
+            if (a['inner']){
+              INNER_used += a['size']
+            }
+
+    });
+
+    n = (INNER_used/INNER_current * 100).toFixed(1)*1;
+    // n = Math.round(INNER_used/INNER_current * 100);
+
+    $size
+        .classed('over', (n>100)? 1:0)
+        .html(`<b>${Math.round(INNER_current)} hrs capacity</b> (${n}% used) `)
+
+}
+
+
+////////////////////////////////////////////////////
+function showOverlay(e, d){
+
+     let target_node = e.target.getBoundingClientRect(),
+        x = target_node.x + (target_node.width/2),
+        y = target_node.y
+
+    // CAL HEIGHT?
+    // console.log(e.target.getBoundingClientRect())   
+    // if ( y < ( $overlay.node().getBoundingClientRect().height + 120) ){
+    if (y < 260){
+        $overlay.classed('alt', true);
+        y += target_node.height
+    }
+
+    else {
+        $overlay.classed('alt',false)
+    }     
+
+    $overlay
+        .datum(d)
+        .attr(`style`,`opacity:1;display:block;left:${x}px;top:${y}px`)
+        .classed('locked',d['lock'])
+        .html(getActivityValues(d))
+
+}
+
+// ADJUSTING SLIDERS
+$overlay
+
+    // SLIDERS
+    .on('input',function(e,d){
+
+        let $target = d3.select(e.target),
+            is_slider = ($target.attr('type')=="range")? 1:0
+
+        if (is_slider){
+
+            let index = d['index'],
+                metric = $target.attr('data-metric'),
+                new_val = $target.property('value')*1
+
+                // UPDATE SRC
+               _activities[index][metric] = new_val;
+               _activities[index]['is_different'] = true;
+
+               $overlay
+                    .select('button')
+                    .property('disabled',false);
+
+               setCircleColours();
+
+        }        
+
+    })
+
+     // BTNS    
+    .on('click',function(e,d){
+
+        let $target = d3.select(e.target),
+            class_attr = $target.attr('class');
+            
+        if (class_attr == 'reset'){
+
+            let index = d['index'],
+                $ratings = $overlay.selectAll('input[type="range"]'),
+                original_data = _DATA[d['index']],
+                $this_circle = $circles_wrapper.select(`[data-activity="${d['activity']}]"`)
+
+                $ratings
+                    .each(function(d,i){
+
+                        let $node = d3.select(this),
+                            metric = $node.attr('data-metric'),
+                            original_metric = original_data[metric]
+
+                        $node.property('value', original_metric);
+                        _activities[index][metric] = original_metric;
+                        
+                 
+               }) 
+
+          // UPDATE COLOURS  
+          setCircleColours();     
+
+        }
+
+        else if (class_attr != 'close'){
+            e.stopPropagation();
+        }    
+
+})
+
+
+////////////////////////////////////////////////////
+function hideOverlay(){
+    $overlay.attr('style',null);
+}
+
+////////////////////////////////////////////////////
+function setNewPosition(){
+
+    // UPDATE CIRCLES & LABELS
+    $circles
+        .each(function(d,i){
+
+            let $node = d3.select(this),
+                x = d['x'],
+                y = d['y'],
+                r = d['radius']
+
+            // CIRCLE
+            $node
+                .attr('cx', x)
+                .attr('cy', y)
+                .attr('r', r)
+
+            // LABEL
+            $labels
+                .filter(function(d1,i1){
+                    return i == i1;
+                })
+                .attr('transform',`translate(${x} ${y})`)
+
+    })
+    
+}
+
+//////////////////////////////////////////////////// 
+function restartIT(){
+    simulation.restart();
+    simulation.alphaTarget(1);
+    simulation.nodes(_activities);
+    restartTimer();
+}
+
+//////////////////////////////////////////////////// 
+function restartTimer(){
+
+    clearTimeout(timer); 
+    timer = setTimeout(function(){
+                simulation.stop();
+            }, 6000)
+
+}
+
+////////////////////////////////////////////////////
+function dragStart(e, d){
+
+    hideOverlay();
+    dragging = true;
+    $info.classed('open', false);
+
+}
+
+////////////////////////////////////////////////////
+function dragDuring(e, d){
+
+    let $node = d3.select(this),
+        current_state = d['inner'];
+
+    if (!d['disruptions']){
+
+        $node 
+            .classed('is_dragging',true)
+            .attr("cx", d['x'] = e.x)
+            .attr("cy", d['y'] = e.y)
+
+        // ADD FLAG TO activities LIST
+        _activities[d['index']]['dragging'] = true;
+
+        if (!d['lock']){
+            
+            let x_diff = Math.abs(e.x - 0), /* SCRAP IF ZER0! */
+                y_diff = Math.abs(e.y - 0),
+                r_diff = Math.sqrt(x_diff*x_diff + y_diff*y_diff)
+
+                // BUFFER?
+                if (r_diff < INNER_current_r){
+
+                    // CHECK IF STATE CHANGE
+                    if (current_state !== true){
+
+                        // NEW INNER
+                        addInner(d['index'])
+                    }
+
+                }
+
+                else {
+
+                    // CHECK IF STATE CHANGE
+                    // if (current_state == true){
+                        // NEW OUTER
+                        // addOuter(d['index'])
+                    // }
+
+                    d['inner'] = false;
+
+                }
+
+        } 
+
+       restartIT();
+
+    }
+    
+}
+
+////////////////////////////////////////////////////
+function dragEnd(e,d){
+
+    let $node = d3.select(this)
+
+    $node.classed('is_dragging',false);
+    _activities[d['index']]['dragging'] = false;
+    dragging = false;
+    setRadius();
+    getAmountUsed();
+    restartIT();
+
+}
+
+
+////////////////////////////////////////////////////
+function setPalette(){
+
+    let this_palette = PALETTES[current_metric];
+
+    $bar
+        .selectAll('div')
+        .transition()
+        .duration(750)
+        .style('background',function(d,i){
+
+            if (current_metric == 'contrast'){
+                i = 0;
+                $body.classed('contrast',true)
+            }
+            else {
+                $body.classed('contrast',false)
+            }
+
+            return this_palette[i]
+        })
+
+    setCircleColours();
+
+}   
+
+
+////////////////////////////////////////////////////
+function setRadius(){
+
+    let OUTER_r = INNER_current_r,
+        OUTER_buffer = 40 
+
+    // FIND LARGEST OUTER RADIUS
+    //  _activities
+    //     .forEach(function(a,i){
+ 
+    //         if (!a['inner']){
+    //           OUTER_buffer = Math.max(OUTER_buffer, a['radius']);
+    //         }
+
+    // });
+
+    OUTER_r += OUTER_buffer;
+    $inner.attr('r', INNER_current_r);
+    $text_inner.attr('d', setPath(Math.max(INNER_current_r - 10, 0)));
+    $text_outer.attr('d', setPath(INNER_current_r + 20));
+
+    setDistruptionCircle();
+    // $outer.attr('r', OUTER_r);
+
+    // UPDATE RADIAL FORCE!
+    simulation
+        .force(
+            'radial', 
+            d3
+                .forceRadial()                
+                .x(0)
+                .x(0)
+                .radius(function(d){
+                    return INNER_current_r + d['radius'] - 5
+                })
+                .strength(function(d){
+
+                    if (!d['inner'] && !d['dragging']){
+                        return .025
+                    }
+
+                    else {
+                        return 0;
+                    }
+                })
+        )
+
+        restartIT();
+
+}  
+
+
+////////////////////////////////////////////////////
+// FOR TEXT ON CURVE
+function setPath(r){
+
+    return `M 0, 0
+            m -${r}, 0
+            a ${r},${r} 0 1,0 ${r*2},0
+            a ${r},${r} 0 1,0 -${r*2},0`
+}
+
+
+////////////////////////////////////////////////////
+function getActivitesByWeight(_arr, is_reverse){
+
+    let _current_weights = []
+
+    _arr
+        .forEach(function(a,i){
+
+            let weight = 0;
+
+            for (let metric in PRIORITES){
+
+                let activity_rating = a[metric],
+                    scale_factor = PRIORITES[metric]*1
+
+                // weight += (activity_rating + activity_rating/10) * scale_factor;
+                weight += (activity_rating * activity_rating) * scale_factor;
+                // weight += (activity_rating + 1) * scale_factor;
+               
+            }
+
+            _current_weights
+                .push({
+                    'activity': a['activity'],
+                    'size': a['size'],
+                    'index': a['index'],
+                    'inner': a['inner'],
+                    'weight': weight
+            })
+        })
+
+        // SORT BY WEIGHT, HIGHEST FIRST
+        // UNLESS ADDING TO INNER, IN WHICH CASE WANNA PUSH SMALLEST, LIGHTEST FIRST!
+        if (is_reverse){
+
+            console.log('REVERSE!!!')
+
+            // WEIGHT DESCENDERING, SIZE ASCENDING
+            _current_weights
+                .sort(function(a,b){
+                    return a['weight'] - b['weight'] || a['size'] - b['size'];
+            });
+
+        }
+
+        else {
+
+            _current_weights
+                .sort(function(a,b){
+                    return b['weight'] - a['weight'] || a['size'] - b['size'];
+            });
+
+
+        }
+
+        return _current_weights;
+
+}
+
+////////////////////////////////////////
+function addFromOuter(){
+
+    console.log('-----------addFromOuter-------------')
+
+    let size_available = INNER_current,
+        size_used = 0,
+        _outer_arr = [],
+        is_full = false;
+
+        // GET BREAKDOWN OF OUTER TO WORK OUT WHAT TO ADD
+        // GET SIZE OF INNER SO KNOW HOW MUCH SPACE
+
+      _activities
+        .forEach(function(a,i){
+
+            // GET SIZE 
+            if (a['inner']){
+                size_used += a['size']
+            }
+            // ADD TO ARR 
+            else {
+                _outer_arr.push(a)
+            }  
+
+     });
+
+     size_available = size_available - size_used;
+
+     // CHECK IF CAN ADD    
+     if (size_available > 0){ 
+
+        // ORDER BY TYPE LIKE REMOVAL?
+        let _sorted_by_weight = getActivitesByWeight(_outer_arr);  
+
+        _sorted_by_weight
+            .forEach(function(a,i){
+
+                let this_size = a['size'],
+                    this_index = a['index'],
+                    new_size = size_available - this_size;
+
+                // STOP ADDING  
+                if (!is_full){    
+
+                    // ADD?
+                    if (new_size > 0){
+                        _activities[this_index]['inner'] = true;
+                        size_available = new_size;
+                    }
+                    else {
+                        is_full = true;
+                    }
+
+                }
+
+        })
+
+     }   
+
+     restartIT();
+}
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////
+function removeFromInner(){
+
+    console.log('-----------removeFromInner-------------')
+
+    let size_available = INNER_current,
+        size_used = 0,
+
+        locked_size = 0,
+        _locked_arr = [],
+
+        support_size = 0,
+        _support_arr = [],
+
+        activity_size = 0,
+        _activity_arr = [],
+
+        is_under = false;
+
+    // GET BREAKDOWN OF INNER TO WORK OUT WHAT TO REMOVE
+    // MAY NOT NEED TO DO ANYTHING!
+    // SEP FUNCTION???
+
+    _activities
+        .forEach(function(a,i){
+
+            if (a['inner']){
+
+                let size = a['size']
+
+                // FIX!!!
+                if (a['disruptions']){
+                }
+
+                else if (a['lock']){
+                    locked_size += size;
+                    _locked_arr.push(a);
+                }
+                else if (a['support_worker']){
+                    support_size += size;
+                    _support_arr.push(a);
+                }
+                else {
+                    activity_size += size;
+                    _activity_arr.push(a)
+                } 
+
+                size_used += size; 
+
+            }    
+
+    });
+
+
+    // CHECK IF THINGS NEED TO BE REMOVED
+    if (size_available - size_used < 0){
+
+        //  REMOVE IN ORDER:
+        // ACTIVITES
+
+        if (activity_size > 0){
+
+            // MOVE T0 FUNCTION!!!    
+            let _sorted_by_weight = getActivitesByWeight(_activity_arr, true);
+
+            _sorted_by_weight
+                .forEach(function(a,i){
+
+                    let this_size = a['size'],
+                        this_index = a['index']
+
+                    // REMOVE
+                    if (!is_under){
+
+                        _activities[this_index]['inner'] = false;
+                        // REMOVE FROM SIZE USED
+                        size_used -= this_size;
+
+                        // CHECK IF UNDER NOW
+                        if (size_available - size_used >= 0){
+                            is_under = true;
+                        }    
+
+                     }   
+            })
+
+        }
+
+        // IF NOT UNDER & SUPPORT TASKS 
+        if (!is_under && support_size > 0){
+
+            let _sorted_by_weight = getActivitesByWeight(_support_arr, true);
+
+            _sorted_by_weight
+                .forEach(function(a,i){
+
+                    let this_size = a['size'],
+                        this_index = a['index']
+
+                    // REMOVE
+                    if (!is_under){
+
+                        _activities[this_index]['inner'] = false;
+                        // REMOVE FROM SIZE USED
+                        size_used -= this_size;
+
+                        // CHECK IF UNDER NOW
+                        if (size_available - size_used >= 0){
+                            is_under = true;
+                        }    
+
+                     }   
+            })
+
+        }    
+
+        // IF NOT FULL, LOCKED (UNLOCK FIRST)
+        console.log(size_available, size_used)
+
+        if (!is_under && locked_size > 0){
+
+            let _sorted_by_weight = getActivitesByWeight(_locked_arr, true);
+
+            _sorted_by_weight
+                .forEach(function(a,i){
+
+                    let this_size = a['size'],
+                        this_index = a['index'],
+                        this_activity = a['activity'],
+                        attr_str = `[data-activity="${this_activity}"]`
+
+                    // REMOVE
+                    if (!is_under){
+
+                        _activities[this_index]['lock'] = false;
+                        _activities[this_index]['inner'] = false;
+
+                        // UPDATE CIRCLE (DATA & CLASS)
+                        $circles_wrapper
+                            .select(attr_str)
+                            .classed('lock', function(d,i){
+                                d['lock'] = false;
+                                return false;
+                         })
+
+                        // UPDATE LABEL (CLASS) 
+                        $labels_wrapper
+                            .select(attr_str)
+                            .classed('lock', function(d,i){
+                                return false;
+                            })    
+
+                        size_used -= this_size;
+
+                        // CHECK IF UNDER NOW
+                        if (size_available - size_used >= 0){
+                            is_under = true;
+                        }    
+
+                     }   
+            })
+        }    
+    }
+
+    restartIT();
+
+}
+
+////////////////////////////////////////////////////
+function getTotalSizeOfActivities(_arr){
+
+    let total = 0
+
+    _arr
+        .forEach(function(a,i){
+          total += a['size'] 
+    })
+
+    return total
+}    
+
+////////////////////////////////////////////////////
+function addInner(index){
+
+    console.log('-----------addInner-------------')
+
+    let this_activity = _activities[index],
+        this_activity_size = this_activity['size'],
+        size_available = INNER_current,
+        size_used = 0,
+        _inner_arr = [],
+        size_diff = 0
+        
+    // GET SIZE OF CURRENT INNER (EXCL. NEW ONE, AS NOT FLAGGED AS INNER YET!)    
+    _activities
+        .forEach(function(a,i){
+
+            // EXCLUDE LOCKED!
+            // INCL. DISTRUPTIONS    
+            if (a['inner']){
+
+                if (!a['lock'] && !a['disruptions']){
+                    _inner_arr.push(a);
+                }
+
+                size_used += a['size'];
+            }
+            
+    })
+
+    size_diff = size_available - size_used - this_activity_size;
+
+    // ADD THIS ACTIVITY
+    this_activity['inner'] = true;
+    
+    // CHECK IF NEED TO PUSH OUT
+    if (size_diff < 0){
+
+        // CHECK IF CAN ACTUALLY FIT!
+        if (getTotalSizeOfActivities(_inner_arr) < this_activity_size){
+
+            console.log(`TOO BIG!!!`);
+            this_activity['inner'] = false;
+        }
+        
+        else { 
+
+            // NOTE REVERSED, SO FIRST ITEM IS LOWEST WEIGHT!!!
+            // IE *LEAST* SUITED TO CURRENT PREFS!!!
+            let _sorted_by_weight = getActivitesByWeight(_inner_arr, true),
+                n = _sorted_by_weight.length
+
+            console.log(_sorted_by_weight)    
+
+            for (let i=0; i<n; i++){
+
+                let activity = _sorted_by_weight[i],
+                    size = activity['size'],
+                    index = activity['index'];
+                    _activities[index]['inner'] = false;
+                    size_diff += size;
+
+                    console.warn(size_diff)
+
+                if (size_diff >= 0){
+                    break;
+                }
+
+            }
+        
+        }
+
+    }
+
+}
+
+////////////////////////////////////////////////////
+function updatePriorities(){
+
+    console.log('-----------updatePriorities-------------')
+
+    // GET CURRENT AVAILABLE SIZE
+
+    let size_available = INNER_current,
+        size_used = 0,
+        _all = [],
+        is_full = false;
+        
+    // FACTOR IN 'KEEP' ITEMS
+    _activities
+        .forEach(function(a,i){
+
+            if (a['lock'] || a['disruptions']){
+                size_used += a['size'];
+            }
+            else {
+                 _all.push(a);
+            }
+    });
+
+    size_available = size_available - size_used;
+    let _sorted_by_weight = getActivitesByWeight(_all);
+
+    console.log(_sorted_by_weight)
+
+    // NOTE: IF FIRST ITEM TOO BIG, PICKS SECOND ETC!
+    _sorted_by_weight
+        .forEach(function(a,i){
+
+            let this_size = a['size'],
+                this_index = a['index'],
+                new_size = size_available - this_size;
+
+           // STOP ADDING   
+           if (!is_full){     
+
+                // ADD?
+                if (new_size > 0){
+                    // console.log(`adding:${_activities[this_index]['activity']}`)
+                    _activities[this_index]['inner'] = true;
+                    size_available = new_size;
+                }
+                else {
+                    // console.log(`NOT adding:${_activities[this_index]['activity']}`)
+                    _activities[this_index]['inner'] = false;
+                    is_full = true;
+                }
+            }
+            else {
+                _activities[this_index]['inner'] = false;
+            }            
+    })
+
+    restartIT();
+
+}
+
+// TOGGLE RHS
+d3
+    .select('#toggle')
+    .on('click',function(){
+        $body.classed('is_fullscreen', !$body.classed("is_fullscreen"))
+});
+
+_DATA
+    .sort(function(a,b){
+        return b['size'] - a['size'];
+});
+
+// GET SIZE OF ALL ACTIVTIES IN INNER (INCL. DISRUPTIONS & SUPPORT WORKERS)
+_DATA
+    .forEach(function(a,i){
+        if (a['inner']){
+            INNER_initial += a['size'];
+        }
+});
+
+
+// USE INNER SIZE TO WORK OUT SCALE, BUFFERS ETC SO FIT TO WINDOW
+// GET RADIUS, BASED ON SCREEN 
+
+base_scale = (Math.PI * Math.pow((min_axis/4), 2)) / INNER_initial;
+
+if (base_scale > 175){
+    base_scale = 175
+}
+
+INNER_scale = 1.5;
+
+console.log(`INNER_initial: ${INNER_initial}`)
+console.log(`screen_w: ${screen_w}`)
+console.log(`screen_h: ${screen_h}`)
+console.log(`min_axis: ${min_axis}`)
+console.log(`base_scale: ${base_scale}`)
+
+// (RE)SET RADIUS
+INNER_initial_r = getRadiusFromArea(INNER_initial) * INNER_scale
+INNER_current = INNER_initial;
+INNER_current_r = INNER_initial_r;
+
+_DATA
+    .forEach(function(a,i){
+
+        let size = a['size'];
+
+        a['radius'] = getRadiusFromArea(size);
+        a['x'] = 0;
+        a['y'] = 0;
+
+        // TO BE SAFE
+        a['activity'] = a['activity'].trim();
+
+        let a_clone = {...a};
+
+        // ADD TO LIST
+        _activities.push(
+            a_clone
+        );
+
+        // DISRUPTIONS
+        if (a['disruptions']){
+            a_clone['size_original'] = size; 
+            DISRUPTIONS_DATA = a_clone;
+        }
+
+})
+
+
+
+// ADD CIRCLES
+let $circles = $circles_wrapper
+        .selectAll('circle')
+        .data(_activities)
+        .join('circle')
+        .attr('data-activity',function(d,i){
+            return d['activity']
+        })
+        .classed('support_worker',function(d,i){
+            return d['support_worker']
+        })
+        .classed('lock',function(d,i){
+            return d['lock']
+        })
+        .call(
+
+            d3
+                .drag()
+                .on("start", dragStart)
+                .on("drag", dragDuring)
+                .on("end", dragEnd)
+
+        )
+
+        .on('click', function(e, d){
+
+            clearTimeout(overlay_timer)
+
+            // SLIGHT DELAY, OTHERWISE MESSSES WITH DBLCLICK  
+            overlay_timer = setTimeout(function(){
+                 showOverlay(e, d)    
+            }, 333)
+
+            e.stopPropagation();
+        })
+        // .on('dblclick', function(e, d){})
+
+
+// NEEDS TO BE SEP. FUNCTION FOR IPAD
+
+$circles_wrapper
+    .on('dblclick', function(e){
+
+        clearTimeout(overlay_timer);
+        hideOverlay(); 
+
+        let $node = d3.select(e.target),
+            d = $node.datum();
+
+        // ONLY FOR INNER CIRCLES!
+        if (d['inner'] && !d['disruptions']){
+
+            let name = d['activity'],
+                index = d['index'],
+                $this_label = $labels_wrapper.select(`[data-activity="${name}"]`)
+
+            if (!d['lock']){
+                // d['lock'] = true;
+                $node.classed('lock', true);
+                $this_label.classed('lock', true);
+                _activities[index]['lock'] = true;
+            }
+            else {
+                // d['lock'] = false;
+                $node.classed('lock', false);
+                $this_label.classed('lock', false);
+                _activities[index]['lock'] = false;
+
+            }
+
+            // console.log(d);
+            // console.log(_activities);
+        }
+
+})
+
+// ADD LABELS
+$circles
+    .each(function(d,i){
+
+        // USED FOR TEXT BELOW. THERE MUST BE A BETTER WAY!!!
+        let activity = d['activity'],
+            size = d['size'],
+            r = d['radius'],
+            _words = activity.split(' '),
+            _words_clean = [],
+            rows = 0,
+            longest_word = 0,
+            font_size = 11,
+            is_small = false,
+            str = ''
+
+        // GET LONGEST WORD
+        _words
+            .forEach(function(a,i){
+                longest_word = Math.max(a.length, longest_word)
+        })
+
+        // JOIN SHORTER WORDS
+        _words
+            .forEach(function(a,i){
+                
+                // CHECK LENGTH OF NEXT WORD
+                if (_words[i+1]!=null && (a.length + _words[i+1].length) <= longest_word ){
+                    _words_clean.push(`${a} ${_words[i+1]}`);
+                    //REMOVE 
+                    _words.splice(i+1, 1)
+                }
+
+                else {
+                    _words_clean.push(a)
+                }
+                
+        })
+
+        rows = _words_clean.length;
+
+        let longest_word_px =  Math.round(r/longest_word)
+
+        // LARGE
+        if (r >= 75){
+            font_size = 12   
+        }
+
+        // MEDIUM
+        // else if (r >= 50){
+        //     font_size = 12   
+        // }
+
+        // SMALL, BUT SHORT WORDS, FEW ROWS
+        else if (rows <= 3 && longest_word_px > 3){
+            font_size = 10
+        }
+
+        // SMALL AND/OR LONG WORDS AND/OR LOTS OF ROWS
+        else {
+            is_small = true;
+        }   
+
+        // CATCH SMALL REGSRDLESS OTHERS
+        if (r < 20){
+            is_small = true;
+        }
+
+        // console.log(activity, r,longest_word, longest_word_px, is_small)
+
+        let $g = $labels_wrapper
+            .append('g')
+            .attr('data-activity', activity)
+            .classed('lock', (d['lock'])? true : false)
+
+        // NEEDED FOR LOCKED OUTLINE        
+         $g
+            .append('circle')
+            .attr('cx',0) 
+            .attr('cy',0)
+            .attr('r', r + 4)   
+            
+         $g
+            .append('text')
+            .attr('class',function(){
+
+                if (d['support_worker']){
+                    return 'support_worker'
+                }
+
+                else if (d['disruptions']){
+                   return 'disruptions' 
+                }
+
+            })
+            .attr('transform',function(){
+
+                if (is_small){
+                    return `translate(0 0)`
+                }
+                else {
+                    return `translate(0 -${Math.round( (rows/2) * (font_size + 0) + (font_size/4))})`
+                }
+                
+            })
+            .html(function(){
+
+                // DON'T SHOW FOR TINY
+                if (is_small){
+                    return '<tspan font-size="11">...</tspan>' 
+                }
+
+                else {
+
+                    _words_clean
+                        .forEach(function(a,i){
+                            str += `<tspan font-size="${font_size}" x="0" dy="${font_size + 0}">${a}</tspan>`
+                    })
+
+                    return str
+
+                }
+
+            })
+
+            // FIX THIS!!!
+            // HIDDEN BY DEFAULT
+            let lock_w = 124,
+                lock_h = 162,
+                scale = .066,
+                y_pos =  $g.select('text').node().getBBox().height    
+
+             $g
+                .append('path')
+                .classed('lighten', ($g.classed('lighten'))? true: false)
+                // .attr('x', 0)
+                // .attr('y', 0)
+                .attr('d', 'M106.9,63.9 L106.9,45.1 C106.9,20.2 86.6,0 61.7,0 C36.8,0 16.6,20.2 16.6,45.1 L16.6,63.9 L0,63.9 L0,161.5 L123.5,161.5 L123.5,63.9 L106.9,63.9 Z M72,130.5 L51.5,130.5 L51.5,95 L72,95 L72,130.5 Z M87.9,63.9 L35.6,63.9 L35.6,45.1 C35.6,30.7 47.3,19 61.7,19 C76.1,19 87.8,30.7 87.8,45.1 L87.8,63.9 L87.9,63.9 Z')
+                .attr('transform',`translate(${Math.round(-lock_w/2*scale)} ${Math.round(y_pos/2 + y_pos/10) - 1}) scale(${scale})`)
+
+
+})
+
+
+let $labels = $labels_wrapper.selectAll('g'),
+    $disruptions_text = $labels_wrapper.select('.disruptions')
+
+function setCentreForce(d){
+
+    if (!d['inner'] || d['dragging']){
+        return 0
+    }
+
+    else {
+        // FORCE RELATIVE TO SIZE
+        return .025 + Math.min(.025, d['size']/10000);
+    }
+
+}
+
+////////////////////////////////////////
+// https://github.com/d3/d3-force
+var simulation = d3
+    .forceSimulation(_activities)
+
+    ////////////////////////////////////////
+    .force(
+        "x", 
+        d3
+            .forceX(centre_x)
+            .strength(function(d){
+                return setCentreForce(d)
+            })
+    )
+    ////////////////////////////////////////
+    .force(
+        "y", 
+        d3
+            .forceY(centre_y)
+            .strength(function(d){
+                return setCentreForce(d)
+            })
+    )
+    ////////////////////////////////////////
+    // DEFAULT IS -30 (- is replusion)
+    .force(
+        'charge', 
+        d3
+            .forceManyBody()
+            .strength(function(d){
+
+                if (!d['inner'] || d['dragging']){
+                    return -30
+                }
+
+                else {
+
+                   // IS RELATIVE TO SIZE, SO ON MOBILE, WHEN SMALLER, CHARGE NEEDS TO BE STRONGER
+                   if (is_smaller){
+                        return -1
+                   }
+                   else {
+                        return -10
+                   }  
+                   
+                }
+        })
+    )
+    ////////////////////////////////////////    
+    .force(
+        'collision', 
+        d3
+            .forceCollide()
+            .radius(function(d){
+                return d['radius'] + ((is_smaller)? 2:6); // PADDING INCL. LOCKED BORDER !!!
+            })
+    )
+
+    // CALLBACK
+    .on('tick', setNewPosition)
+
+
+
+$select
+    .on('change',function(){
+        current_metric = this.value;
+        setPalette()
+});
+
+///////////////////////////////////////////
+function adjustScale(scale, is_disruptions){
+
+    let this_scale = scale;
+
+    if (is_disruptions && scale > 1){
+        this_scale = this_scale * this_scale
+    }
+
+    return this_scale; 
+
+};
+
+// AREA NEEDED!!!!!!!!!!!!!!!!!!!!!!!!!
+let current_support = 1,
+    current_disruption = 1;
+ 
+$support_slider
+    .on('input',function(){
+
+        console.log('-----------support slider-------------')
+
+        let val = this.value * 1,
+            adjusted_scale = adjustScale(val),
+            new_size = INNER_initial * adjusted_scale
+
+        INNER_current = new_size;
+        INNER_current_r = getRadiusFromArea(INNER_current) * INNER_scale
+
+        if (INNER_current_r >= DISRUPTIONS_DATA['radius']){
+            setDistruptionCircle()
+        }
+
+        setRadius();
+
+        if (val < current_support){
+            removeFromInner();
+        }
+        else {
+            addFromOuter();
+        }
+
+        current_support = val;
+        getAmountUsed();
+
+})
+
+
+// AREA NEEDED!!!!!!!!!!!!!!!!!!!!!!!!!
+$disruptions_slider
+    .on('input',function(){
+
+        console.log('-----------disruptions slider-------------')
+
+        let val = this.value*1,
+            adjusted_scale = adjustScale(val, true),
+            new_size = DISRUPTIONS_DATA['size_original'] * adjusted_scale
+
+        DISRUPTIONS_DATA['size'] = new_size;     
+        DISRUPTIONS_DATA['radius'] = getRadiusFromArea(new_size); 
+
+        setDistruptionCircle();
+        
+        if (val > current_disruption){
+            removeFromInner();
+        }
+        else {
+            addFromOuter();
+        }
+
+        current_disruption = val;
+        getAmountUsed();
+        
+
+})
+
+
+
+
+
+
+
+////////////////////////////////////////
+$priorities 
+    .on('input',function(d,i){
+
+        let $node = d3.select(this),
+            metric = $node.attr('data-metric'), 
+            scale = this.value*1
+
+        // NOTE NAMING OF FIRST 3 SLIDERS!
+        if (
+            metric == 'risk' ||
+            metric == 'cost' ||
+            metric == 'complexity'
+        
+        ){
+            scale = scale * -1;
+        }
+
+
+        // WEIGHT CURRENT METRIC?
+        current_metric = metric;
+        PRIORITES[metric] = scale;
+        updatePriorities();
+
+
+})
+
+
+////////////////////////////////////////
+// INFO WINDOWS
+d3
+    .selectAll('a.info, #info_main')
+    .on('click',function(){
+
+        let $node = d3.select(this),
+            section = $node.attr('data-section')
+
+        $info_text.html(info_data[section])
+        $info.classed('open',true)
+
+})
+
+d3
+    .select('a.close')
+    .on('click',function(){
+
+        $info.classed('open',false)
+        $info_text.html('')
+
+})
+
+
+
+
+////////////////////////////////////////
+// SET INITAL CONDITIONS
+
+setRadius();
+getAmountUsed();
+setPalette();
+
+</script>
+</body>
+</html>
