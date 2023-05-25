@@ -3,21 +3,17 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>NORTHCOTT - STAGE 3</title>
+    <title>NORTHCOTT - STAGE 2</title>
+    <link rel="icon" href="img/icon.png">
 <style>
-
 html {
-height:100vh;
-box-sizing: border-box}
+height:100%}
 
-*, 
-*:before, 
-*:after {
-box-sizing:inherit}
+* {
+box-sizing:border-box}
 
 :root {
 --contrast:#3B4761;
---purple:#A653B8;
 --t:.5s;
 --rhs:304px}
 
@@ -225,89 +221,6 @@ box-shadow:-5px 0px 5px 5px rgba(0,0,0,0.05);
 overflow:auto;
 transition:transform var(--t)}
 
-/* CUSTOM SLIDERS */
-
-
-
-.slider {
-margin:35px 0 15px;    
-border-top:1px solid #D9D9D9;
-border-bottom:1px solid #D9D9D9;
-position:relative;
-user-select:none}
-
-.slider:before,
-.slider:after {
-position:absolute;
-left:0;
-top:100%;
-font-size:10px;
-line-height:1;
-color:#999;
-content:'Less';
-transform:translate(0,5px);
-z-index:0} 
-
-.slider:after {
-content:'More';    
-left:auto;
-right:0}    
-
-#priorities .slider:before {
-content:'Less (?)'}   
-
-#priorities .slider:after {
-content:'More (?)'}    
-
-.slider:after {
-content:'More';    
-left:auto;
-right:0} 
-
-.indicator {
-position:absolute;  
-top:0;
-left:0;    
-width:0;
-height:4px;
-background:var(--purple);
-border-radius:2px;
-transform:translateX(120px) translate(0, -50%);
-pointer-events:none}
-
-.marker {
-position:absolute;  
-top:0;
-left:0;    
-width:28px;
-height:28px;
-background:#fff;
-border:2px solid #D9D9D9;
-border-radius:50%;
-transform:translateX(120px) translate(-50%, -50%);
-box-shadow:0 0 2px 1px rgba(0,0,0,0.05);
-cursor:grab;
-z-index:1}
-
-.marker.is-dragging {
-cursor:grabbing}
-
-.marker span {
-font-size:11px;
-line-height:1;    
-position:absolute;
-left:50%;
-bottom:100%;
-white-space:nowrap;
-text-align:center;
-transform:translateY(-1px) translate(-50%, -50%);
-pointer-events:none;
-user-select:none}
-
-.animate .marker,
-.animate .indicator {
-transition:transform .5s;}
-
 /* TOGGLE */
 
 #toggle {
@@ -327,6 +240,7 @@ cursor:pointer}
 
 .is_fullscreen #toggle,
 .is_fullscreen aside {
+/* right:calc(var(--rhs) * -1); */
 transform:translateX(var(--rhs))}
 
 .is_fullscreen #toggle {
@@ -340,12 +254,10 @@ width:100%}
 
 aside .set,
 #key {
-/* max-width:240px */
-width:240px; 
-}
+max-width:240px}
 
 #priorities {
-margin-bottom:4rem}
+margin-bottom:2rem}
 
 #priorities h2  {
 margin-bottom:1rem}
@@ -353,7 +265,17 @@ margin-bottom:1rem}
 #priorities .wrapper  {
 position:relative}
 
-.set .metric {
+/* #priorities .wrapper:after  {
+content:'';
+position:absolute;
+left:50%;
+top:100%;
+border-left:1px solid #000;
+height:6px;
+transform:translate(0,0);
+opacity:.25} */
+
+.set > div {
 margin-bottom:2rem}
 
 input[type="range"] {
@@ -512,6 +434,11 @@ margin:0}
 #overlay .line input.disabled {
 opacity:.5}  
 
+/* #overlay .dot {
+position:absolute;
+background:#000;
+height:100%} */
+
 #overlay .notes {
 font-size:11px;
 color:#999;
@@ -566,19 +493,12 @@ cursor:pointer}
 content:"×";
 opacity:.25}
 
+/* */
 @media (pointer:fine){
 
     #circles_wrapper circle:not([data-activity="Disruptions"]):hover {
     opacity:.75;
     transition:opacity var(--t), stroke var(--t)}
-
-}
-
-@media (pointer:coarse){
-
-    /* .marker {
-    width:1.5rem;
-    height:1.5rem} */
 
 }
 </style>
@@ -590,8 +510,8 @@ opacity:.25}
     <svg>
 
         <svg x="50%" y="54">
-            <text id="title" x="0" y="0">VERSION 3.0</text>
-            <g id="info_main" data-section="main" transform="translate(120, -11)"> 
+            <text id="title" x="0" y="0">STAGE 2</text>
+            <g id="info_main" data-section="main" transform="translate(85, -10)"> 
                 <circle cx="0" cy="0" r="10" />
                 <text x="0" y="4">?</text>
             </g>
@@ -644,46 +564,30 @@ opacity:.25}
 
             <h2>What’s prioritised? <a data-section="priorities" class="info">?</a></h2>
 
-            <div class="metric">
+            <div>
                 <h3>Reducing risk</h3>
-                <div class="slider">
-                    <div class="indicator"></div> 
-                    <div class="marker" data-metric="risk"><span class="n">0</span></div> 
-                </div>
-                <!-- <div class="wrapper"><input data-metric="risk" type="range" value="0" min="-4" max="4" step=".25" /></div> -->
+                <div class="wrapper"><input data-metric="risk" type="range" value="0" min="-4" max="4" step=".25" /></div>
             </div>
             
-            <div class="metric">
+            <div>
                 <h3>Reducing cost</h3>
-                <div class="slider">
-                    <div class="indicator"></div> 
-                    <div class="marker" data-metric="cost"><span class="n">0</span></div> 
-                </div>
-                <!-- <div class="wrapper"><input data-metric="cost" type="range" value="0" min="-4" max="4" step=".25" /></div> -->
+                <div class="wrapper"><input data-metric="cost" type="range" value="0" min="-4" max="4" step=".25" /></div>
             </div>
 
-            <div class="metric">
+            <div>
                 <h3>Reducing complexity</h3>
-                <div class="slider">
-                    <div class="indicator"></div> 
-                    <div class="marker" data-metric="complexity"><span class="n">0</span></div> 
-                </div>
-                <!-- <div class="wrapper"><input data-metric="complexity" type="range" value="0" min="-4" max="4" step=".25" /></div> -->
+                <div class="wrapper"><input data-metric="complexity" type="range" value="0" min="-4" max="4" step=".25" /></div>
             </div>
 
-            <div class="metric">
+            <div>
                 <h3>Doing things that Steve enjoys</h3>
-                <div class="slider">
-                    <div class="indicator"></div> 
-                    <div class="marker" data-metric="enjoyment"><span class="n">0</span></div> 
-                </div>
-                <!-- <div class="wrapper"><input data-metric="enjoyment" type="range" value="0" min="-4" max="4" step=".25" /></div> -->
+                <div class="wrapper"><input data-metric="enjoyment" type="range" value="0" min="-4" max="4" step=".25" /></div>
             </div>
 
-            <!-- <div>
+            <div>
                 <h3>Being aware of what Steve enjoys</h3>
                 <div class="wrapper"><input data-metric="awareness" type="range" value="0" min="-4" max="4" step=".25" /></div>
-            </div> -->
+            </div>
 
         </div>
 
@@ -691,12 +595,8 @@ opacity:.25}
 
             <h2>How much support? <a data-section="support" class="info">?</a></h2>
 
-            <div class="metric">
-                <div class="slider">
-                    <div class="indicator"></div> 
-                    <div class="marker" data-metric="support"><span class="n">100%</span></div> 
-                </div>
-                <!-- <div class="wrapper"><input data-metric="support" type="range" min="0" max="4" step=".025" value="1"  /></div> -->
+            <div>
+                <div class="wrapper"><input data-metric="support" type="range" min="0" max="4" step=".025" value="1"  /></div>
             </div>
 
         </div>
@@ -705,12 +605,8 @@ opacity:.25}
 
             <h2>How many disruptions? <a data-section="disruptions" class="info">?</a></h2>
 
-            <div class="metric">
-                <div class="slider">
-                    <div class="indicator"></div> 
-                    <div class="marker" data-metric="disruptions"><span class="n">100%</span></div> 
-                </div>
-                <!-- <div class="wrapper"><input data-metric="disruptions" type="range" min="0" max="4" step=".025" value="1" /></div> -->
+            <div>
+                <div class="wrapper"><input data-metric="disruptions" type="range" min="0" max="4" step=".025" value="1" /></div>
             </div>
 
         </div>
@@ -720,11 +616,11 @@ opacity:.25}
     <div id="key">
 
         <select>
-            <option value="risk" selected="selected">Risk</option>
+            <option value="risk">Risk</option>
             <option value="cost">Cost</option>
             <option value="complexity">Complexity</option>
-            <option value="enjoyment">Steve’s enjoyment</option>
-            <!-- <option value="awareness">Awarness of Steve’s enjoyment</option> -->
+            <option value="enjoyment" selected="selected">Steve’s enjoyment</option>
+            <option value="awareness">Awarness of Steve’s enjoyment</option>
             <option value="support">Support</option>
             <option value="contrast">High contrast</option>
         </select>
@@ -759,7 +655,7 @@ opacity:.25}
     <div id="info_text"></div>
 </div>
 
-<script src="https://unpkg.com/d3@7.8.4/dist/d3.min.js"></script>
+<script src="d3.v7.min.js"></script>
 <script>
 
 'use strict'  
@@ -773,7 +669,15 @@ opacity:.25}
 
 // DATA ////////////////////////////////////////
 
-// UNITLESS!!!
+/*
+
+- OPTION TO SET TOTAL SUPPORT HRS? (USE WHICHEVER IS LARGER)
+- RESET
+- DIFF APPROACHES TO SLIDERS, STEPS ETC. ARTCULATE!!!
+
+*/
+
+
 let _DATA = [
 
     // KEEP DISRUPTION FIRST?
@@ -892,7 +796,7 @@ let _DATA = [
         enjoyment: 2,
         awareness: 4, 
         inner: true,
-        lock: true 
+        keep: true 
     },{
         activity: 'Shoes/Socks',
         size: 5, 
@@ -903,7 +807,7 @@ let _DATA = [
         enjoyment: 2,
         awareness: 4, 
         inner: true,
-        lock: true 
+        keep: true 
     },{ 
         activity: 'Eating Meals',
         size: 15, 
@@ -914,7 +818,7 @@ let _DATA = [
         enjoyment: 4,
         awareness: 4, 
         inner: true,
-        lock: true 
+        keep: true 
     },{
         activity: 'Drinking beverages',
         size: 7.5, 
@@ -925,7 +829,7 @@ let _DATA = [
         enjoyment: 4,
         awareness: 4, 
         inner: true,
-        lock: true 
+        keep: true 
     },{
         activity: 'Cleaning room',
         size: 5, 
@@ -948,7 +852,7 @@ let _DATA = [
         awareness: 3, 
         inner: true, 
         keep: true, 
-        notes: 'includes travel'
+        notes: 'includes travel (6hrs)'
     },{
         activity: 'Bowlo visit (day)',
         size: 16, 
@@ -1227,19 +1131,9 @@ let $window = d3.select('window'),
     $size = d3.select('#size span'),
 
     // RHS
-    // $priorities = d3.selectAll('#priorities input[type="range"]'),
+    $priorities = d3.selectAll('#priorities input[type="range"]'),
     $bar = d3.select('.bar'),
     $select = d3.select('select'),
-
-    // CUSTOM SLIDERS
-    // PRIORITIES
-    w = 240,
-    $sliders = d3.selectAll('.sliders'),
-    $markers = d3.selectAll('.marker'),
-    $indicators = d3.selectAll('.indicator'),
-    $ns = d3.selectAll('.n'),
-
-    // SUPPORT 
 
     $inner = d3.select('#inner'),
     // $outer = d3.select('#outer'),
@@ -1286,8 +1180,8 @@ let $window = d3.select('window'),
         contrast: ['#3B4761', '#fff']
     },
 
-    // REALTES TO DROPDOWN
-    current_metric = 'risk',
+    // USE TO SET DROPDOWN
+    current_metric = 'enjoyment',
 
     screen_w = Math.min(window.screen.width, window.innerWidth),
     screen_h = Math.min(window.screen.height, window.innerHeight),
@@ -1319,218 +1213,8 @@ if (screen_w < 960){
      hideOverlay();    
 });
 
-window.addEventListener('resize', hideOverlay);
+window.addEventListener('resize',hideOverlay);
 
-
-////////////////////////////////////////////////
-// CUSTOM PRIORITIES SLIDERS
-
-$markers
-    .datum(function(d,i){
-
-        let obj = {
-                'metric': d3.select(this).attr('data-metric'),
-                'scale': 0
-            }
-
-        return obj; 
-        
-     })
-    .call(
-        d3
-            .drag()
-            .on('start', markerDragStart)
-            .on('drag', markerIsDragging)
-            .on('end', markerDragEnd)
-        )
-
-// -5 to 5
-function scaledPrioritesVal(px){
-
-    let val = (px - (w/2))/(w/10);
-    return val.toFixed(1)*1;
-} 
-
-// 0% to 200%
-function scaledSupportVal(px){
-
-    let val = Math.round(px/w*100), // 0-100% 
-        diff;
-    
-    // 100 - 400%
-    if (val >= 50){
-        diff = val - 50;
-        val = 100 + (diff/50 * 300);
-    }
-    else {
-        diff = 50- val;
-        val = 100 - (diff/50 * 100);
-    }     
-      
-    return Math.round(val);
-} 
-
-function markerDragStart(e, d){
-    d3
-        .select(this)
-        .classed('is-dragging',true)
-}  
-
-function markerIsDragging(e, d){
-
-    let $node = d3.select(this),
-        $parent = d3.select(this.parentNode),
-        $indicator = $parent.select('.indicator'),
-        $n = d3.select(this.parentNode).select('.n'),
-        x_pos = e.x,
-
-        metric = d['metric'],
-        scale = d['scale'];
-
-    if (x_pos < 0){
-        x_pos = 0
-    }
-
-    else if (x_pos > w) {
-        x_pos = w
-    }  
-
-    // UPDATE MARKER
-    $node.style('transform', `translateX(${x_pos}px) translate(-50%, -50%)`);
-
-    // UPDATE INDICATOR
-    let diff = x_pos - (w/2),
-        indicator_w = Math.abs(diff),
-        indicator_shift = (diff < 0)? diff : 0,
-        indicator_class = (diff < 0)? true : false;
-
-    $parent.classed('negative', indicator_class)    
-
-    $indicator
-        .style('width', `${indicator_w}px`)
-        .style('transform', `translateX(${indicator_shift}px) translateX(${w/2}px) translate(0, -50%)`);
-
-    // SUPPORT
-    // DIFF SCALE... ORIG 0 - 4
-    if (metric == 'support'){
-
-        //  console.log('---support slider---')       
-
-        // SCALE TO ACTUAL VALUE
-        scale = scaledSupportVal(x_pos);
-
-        // UPDATE DISPLAY VALUE
-        $n.html(`${scale}%`);
-
-        let val = scale,
-            adjusted_scale = scale/100,
-            new_size = INNER_initial * adjusted_scale
-
-        console.log(adjusted_scale)    
-
-        INNER_current = new_size;
-        INNER_current_r = getRadiusFromArea(INNER_current) * INNER_scale
-
-        if (INNER_current_r >= DISRUPTIONS_DATA['radius']){
-            setDistruptionCircle()
-        }
-
-        setRadius();
-
-        if (val < current_support){
-            removeFromInner();
-        }
-        else {
-            addFromOuter();
-        }
-
-        current_support = val;
-        getAmountUsed();
-    }
-
-    // DISRUPTIONS
-    // DIFF SCALE... ORIG 0 - 4
-    else if (metric == 'disruptions'){
-
-        // console.log('---disruptions slider---')
-
-        // SCALE TO ACTUAL VALUE
-        scale = scaledSupportVal(x_pos);
-
-        // UPDATE DISPLAY VALUE
-        $n.html(`${scale}%`);
-
-        let val = scale,
-            adjusted_scale = scale/100,
-            new_size = DISRUPTIONS_DATA['size_original'] * adjusted_scale
-
-        DISRUPTIONS_DATA['size'] = new_size;     
-        DISRUPTIONS_DATA['radius'] = getRadiusFromArea(new_size); 
-
-        setDistruptionCircle();
-        
-        if (val > current_disruption){
-            removeFromInner();
-        }
-        else {
-            addFromOuter();
-        }
-
-        current_disruption = val;
-        getAmountUsed();
-
-    } 
-
-    // PRIORITIES
-    else {       
-
-        // SCALE TO ACTUAL VALUE
-        scale = scaledPrioritesVal(x_pos);
-
-        // UPDATE DISPLAY VALUE
-        $n.html(`${(diff > 0)?'+':''}${scale}`);
-
-        // UPDATE ACTUAL VALUE
-        d['scale'] = scale;
-
-        // UPDATE CIRCLES ETC
-        // NOTE NAMING OF FIRST 3 SLIDERS!
-        if (
-            metric == 'risk' ||
-            metric == 'cost' ||
-            metric == 'complexity'
-        
-        ){
-            scale = scale * -1;
-        }
-
-        // console.log(metric, scale)
-
-        // WEIGHT CURRENT METRIC?
-        current_metric = metric;
-        PRIORITES[metric] = scale;
-        updatePriorities();
-
-    }
-
-
-} 
-
-function markerDragEnd(e, d){
-    // console.log(d)
-        d3
-        .select(this)
-        .classed('is-dragging',false)  
-} 
-
-
-
-
-
-
-
-
-///////////////////////////////////////////////////////
 d3
     .select('#download')
     .on('click', function(){
@@ -1539,7 +1223,7 @@ d3
             txt = ``,
             opts = [
                 'Activity',
-                'Size (UNITS)',
+                'Size (hrs)',
                 'Locked (Y/N)',
                 'Risk (0-5)',
                 'Cost (0-5)',
@@ -1695,7 +1379,7 @@ function getActivityValues(d){
         values = ['risk', 'cost', 'complexity', 'enjoyment', 'awareness'],
         btn_attr = (d['is_different'])? '' : 'disabled'
 
-    str += `<div class="close"></div><h3>${d['activity']}</h3><h5>${d['size'].toFixed(1)*1} UNITS</h5><div class="stats">`
+    str += `<div class="close"></div><h3>${d['activity']}</h3><h5>${d['size'].toFixed(1)*1}hrs</h5><div class="stats">`
 
     for (let i=0; i<values.length; i++){
 
@@ -1707,7 +1391,7 @@ function getActivityValues(d){
         str += `<div>
         <h4>${value}</h4>
         <div class="line">
-            <input data-metric="${value}" type="range" value="${n}" min="1" max="5" step="1" ${(disable)? "disabled":""} class=${(disable)? "disabled":""}></div>
+            <input data-metric="${value}" type="range" value="${n}" min="0" max="4" step="1" ${(disable)? "disabled":""} class=${(disable)? "disabled":""}></div>
         </div>`
 
     }
@@ -1746,7 +1430,7 @@ function getAmountUsed(){
 
     $size
         .classed('over', (n>100)? 1:0)
-        .html(`<b>${Math.round(INNER_current)} UNITS capacity</b> (${n}% used) `)
+        .html(`<b>${Math.round(INNER_current)} hrs capacity</b> (${n}% used) `)
 
 }
 
@@ -2127,7 +1811,7 @@ function getActivitesByWeight(_arr, is_reverse){
 ////////////////////////////////////////
 function addFromOuter(){
 
-    console.log('---addFromOuter---')
+    console.log('-----------addFromOuter-------------')
 
     let size_available = INNER_current,
         size_used = 0,
@@ -2145,7 +1829,7 @@ function addFromOuter(){
                 size_used += a['size']
             }
             // ADD TO ARR 
-            else if (!a['lock']){
+            else {
                 _outer_arr.push(a)
             }  
 
@@ -2197,7 +1881,7 @@ function addFromOuter(){
 ////////////////////////////////////////////////////
 function removeFromInner(){
 
-    console.log('---removeFromInner---')
+    console.log('-----------removeFromInner-------------')
 
     let size_available = INNER_current,
         size_used = 0,
@@ -2378,7 +2062,7 @@ function getTotalSizeOfActivities(_arr){
 ////////////////////////////////////////////////////
 function addInner(index){
 
-    console.log('---addInner---')
+    console.log('-----------addInner-------------')
 
     let this_activity = _activities[index],
         this_activity_size = this_activity['size'],
@@ -2426,7 +2110,7 @@ function addInner(index){
             let _sorted_by_weight = getActivitesByWeight(_inner_arr, true),
                 n = _sorted_by_weight.length
 
-            // console.log(_sorted_by_weight)    
+            console.log(_sorted_by_weight)    
 
             for (let i=0; i<n; i++){
 
@@ -2453,7 +2137,7 @@ function addInner(index){
 ////////////////////////////////////////////////////
 function updatePriorities(){
 
-    console.log('---updatePriorities---')
+    console.log('-----------updatePriorities-------------')
 
     // GET CURRENT AVAILABLE SIZE
 
@@ -2477,7 +2161,7 @@ function updatePriorities(){
     size_available = size_available - size_used;
     let _sorted_by_weight = getActivitesByWeight(_all);
 
-    // console.log(_sorted_by_weight)
+    console.log(_sorted_by_weight)
 
     // NOTE: IF FIRST ITEM TOO BIG, PICKS SECOND ETC!
     _sorted_by_weight
@@ -2633,8 +2317,7 @@ $circles_wrapper
             d = $node.datum();
 
         // ONLY FOR INNER CIRCLES!
-        // if (d['inner'] && !d['disruptions']){
-        if (!d['disruptions']){
+        if (d['inner'] && !d['disruptions']){
 
             let name = d['activity'],
                 index = d['index'],
@@ -2905,66 +2588,65 @@ function adjustScale(scale, is_disruptions){
 // AREA NEEDED!!!!!!!!!!!!!!!!!!!!!!!!!
 let current_support = 1,
     current_disruption = 1;
+ 
+$support_slider
+    .on('input',function(){
 
+        console.log('-----------support slider-------------')
 
-// $support_slider
-//     .on('input',function(){
+        let val = this.value * 1,
+            adjusted_scale = adjustScale(val),
+            new_size = INNER_initial * adjusted_scale
 
-//         console.log('---support slider---')
+        INNER_current = new_size;
+        INNER_current_r = getRadiusFromArea(INNER_current) * INNER_scale
 
-//         let val = this.value * 1,
-//             adjusted_scale = adjustScale(val),
-//             new_size = INNER_initial * adjusted_scale
+        if (INNER_current_r >= DISRUPTIONS_DATA['radius']){
+            setDistruptionCircle()
+        }
 
-//         INNER_current = new_size;
-//         INNER_current_r = getRadiusFromArea(INNER_current) * INNER_scale
+        setRadius();
 
-//         if (INNER_current_r >= DISRUPTIONS_DATA['radius']){
-//             setDistruptionCircle()
-//         }
+        if (val < current_support){
+            removeFromInner();
+        }
+        else {
+            addFromOuter();
+        }
 
-//         setRadius();
+        current_support = val;
+        getAmountUsed();
 
-//         if (val < current_support){
-//             removeFromInner();
-//         }
-//         else {
-//             addFromOuter();
-//         }
-
-//         current_support = val;
-//         getAmountUsed();
-
-// })
+})
 
 
 // AREA NEEDED!!!!!!!!!!!!!!!!!!!!!!!!!
-// $disruptions_slider
-//     .on('input',function(){
+$disruptions_slider
+    .on('input',function(){
 
-//         console.log('---disruptions slider---')
+        console.log('-----------disruptions slider-------------')
 
-//         let val = this.value*1,
-//             adjusted_scale = adjustScale(val, true),
-//             new_size = DISRUPTIONS_DATA['size_original'] * adjusted_scale
+        let val = this.value*1,
+            adjusted_scale = adjustScale(val, true),
+            new_size = DISRUPTIONS_DATA['size_original'] * adjusted_scale
 
-//         DISRUPTIONS_DATA['size'] = new_size;     
-//         DISRUPTIONS_DATA['radius'] = getRadiusFromArea(new_size); 
+        DISRUPTIONS_DATA['size'] = new_size;     
+        DISRUPTIONS_DATA['radius'] = getRadiusFromArea(new_size); 
 
-//         setDistruptionCircle();
+        setDistruptionCircle();
         
-//         if (val > current_disruption){
-//             removeFromInner();
-//         }
-//         else {
-//             addFromOuter();
-//         }
+        if (val > current_disruption){
+            removeFromInner();
+        }
+        else {
+            addFromOuter();
+        }
 
-//         current_disruption = val;
-//         getAmountUsed();
+        current_disruption = val;
+        getAmountUsed();
         
 
-// })
+})
 
 
 
@@ -2973,31 +2655,31 @@ let current_support = 1,
 
 
 ////////////////////////////////////////
-// $priorities 
-//     .on('input',function(d,i){
+$priorities 
+    .on('input',function(d,i){
 
-//         let $node = d3.select(this),
-//             metric = $node.attr('data-metric'), 
-//             scale = this.value*1
+        let $node = d3.select(this),
+            metric = $node.attr('data-metric'), 
+            scale = this.value*1
 
-//         // NOTE NAMING OF FIRST 3 SLIDERS!
-//         if (
-//             metric == 'risk' ||
-//             metric == 'cost' ||
-//             metric == 'complexity'
+        // NOTE NAMING OF FIRST 3 SLIDERS!
+        if (
+            metric == 'risk' ||
+            metric == 'cost' ||
+            metric == 'complexity'
         
-//         ){
-//             scale = scale * -1;
-//         }
+        ){
+            scale = scale * -1;
+        }
 
 
-//         // WEIGHT CURRENT METRIC?
-//         current_metric = metric;
-//         PRIORITES[metric] = scale;
-//         updatePriorities();
+        // WEIGHT CURRENT METRIC?
+        current_metric = metric;
+        PRIORITES[metric] = scale;
+        updatePriorities();
 
 
-// })
+})
 
 
 ////////////////////////////////////////
