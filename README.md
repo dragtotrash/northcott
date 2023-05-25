@@ -1,6 +1,6 @@
 # northcott
 northcott WIP
 
+description here.
 
-https://pages.github.com/
-https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site
+https://github.com/dragtotrash/northcott-wip/
